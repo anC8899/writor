@@ -1,15 +1,15 @@
 @extends('backend.layout')
 @section('page_title')
-<h1>写文章 <a href="{{url('/admin/post/all')}}" class="btn btn-info">文章列表</a></h1>
+<h1>编辑文章 <a href="{{url('/admin/post/all')}}" class="btn btn-info">文章列表</a></h1>
 @endsection
 @section('content')
       <div class="row">
-        <form action="{{url('/admin/post/create')}}" method="post" accept-charset="utf-8" class="form-horizontal">
+        <form action="{{url('/admin/post/update', array('id' => $post->id))}}" method="post" accept-charset="utf-8" class="form-horizontal">
           <div class="col-md-12 form-group">
-            <input type="text" class="form-control " name="title" value="" placeholder="文章标题"><br>
+            <input type="text" class="form-control " name="title" value="{{$post->post_title}}" placeholder="文章标题"><br>
           </div>
           <div class="col-md-12 form-group">
-            <textarea name="content" id="content" class="col-md-12"></textarea>
+            <textarea name="content" id="content" class="col-md-12">{{$post->post_content}}</textarea>
           </div>
           <div class="col-md-12 form-group">
             <div class="col-md-12">
@@ -18,7 +18,7 @@
           </div>
           <div class="col-md-12 form-group pull-right">
             <div class="col-md-3">
-              <button type="submit" class="btn btn-success"> 发 布 </button>
+              <button type="submit" class="btn btn-success"> 保存 </button>
               <button type="button" class="btn btn-default"> 存为草稿 </button>
             </div>
             <label class="col-md-1 control-label">文章分类: </label>
@@ -53,5 +53,6 @@
 <script src="{{ asset('/assets/js/prettify.js') }}"></script>
 <script src="{{ asset('/assets/js/marked.js') }}"></script>
 <script src="{{ asset('/assets/js/editor.js') }}"></script>
-<script src="{{ asset('/assets/js/post.js') }}"></script> 
+<script src="{{ asset('/assets/js/post.js') }}"></script>
+
 @endsection

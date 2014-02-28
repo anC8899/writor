@@ -5,6 +5,10 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 
 class User extends Eloquent implements UserInterface, RemindableInterface {
 
+	const STATUS_NORMAL   = 1;   //正常
+	const STATUS_DISABLED = 0; //禁用
+
+
 	/**
 	 * The database table used by the model.
 	 *
@@ -13,11 +17,21 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $table = 'users';
 
 	/**
+	 * 文章
+	 *
+	 * @return object
+	 */
+	public function posts()
+	{
+		return $this->hasMany('Post', 'post_author')->with('TermRelation');
+	}
+
+	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password');
+	protected $hidden = array('user_pass');
 
 	/**
 	 * Get the unique identifier for the user.
@@ -36,7 +50,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	public function getAuthPassword()
 	{
-		return $this->password;
+		return $this->user_pass;
 	}
 
 	/**
@@ -46,7 +60,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	public function getReminderEmail()
 	{
-		return $this->email;
+		return $this->user_email;
 	}
 
 }

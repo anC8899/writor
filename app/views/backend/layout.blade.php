@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh_CN">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,10 +29,8 @@
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
-
-  <!-- TS1392191283: Neon - Responsive Admin Template created by Laborator -->
 </head>
-<body class="page-body page-fade">
+<body class="page-body">
   <div class="page-container @if(isset($_COOKIE['sidebar_status']) && $_COOKIE['sidebar_status'] == 'hide') sidebar-collapsed @endif">
     <div class="sidebar-menu">
       <header class="logo-env">
@@ -56,7 +54,7 @@
         </div>
       </header>
       <ul id="main-menu" class="">
-        <li class="opened active">
+        <li>
           <a href="{{ url('admin') }}">
             <i class="entypo-gauge"></i>
             <span>控制面板</span>
@@ -92,7 +90,7 @@
 
         </li>
 
-        <li>
+        <!-- <li>
           <a href="{{ url('/admin/comment/all') }}">
             <i class="entypo-comment"></i>
             <span>评论</span>
@@ -142,9 +140,9 @@
               </a>
             </li>
           </ul>
-        </li>
+        </li> -->
 
-        <li>
+        <!-- <li>
           <a href="{{ url('/admin/user/all') }}">
             <i class="entypo-user"></i>
             <span>用户</span>
@@ -163,7 +161,7 @@
               </a>
             </li>
           </ul>
-        </li>
+        </li> -->
 
         <li>
           <a href="{{ url('/admin/setting/basic') }}">
@@ -189,11 +187,8 @@
             <!-- Profile Info -->
             <li class="profile-info dropdown">
               <!-- add class "pull-right" if you want to place this from right -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="http://themes.laborator.co/neon/assets/images/thumb-1@2x.png" alt="" class="img-circle" width="44" />
-                Art Ramadani
-              </a>
-
+              @yield('page_title')
+              
               <ul class="dropdown-menu">
                 <!-- Reverse Caret -->
                 <li class="caret"></li>
@@ -205,13 +200,13 @@
                   </a>
                 </li>
                 <li>
-                  <a href="http://themes.laborator.co/neon/mailbox/main/">
+                  <a href="/mailbox/main/">
                     <i class="entypo-mail"></i>
                     Inbox
                   </a>
                 </li>
                 <li>
-                  <a href="http://themes.laborator.co/neon/extra/calendar/">
+                  <a href="/extra/calendar/">
                     <i class="entypo-calendar"></i>
                     Calendar
                   </a>
@@ -238,7 +233,7 @@
             </li>
             <li class="sep"></li>
             <li>
-              <a href="">
+              <a href="{{url('/admin/auth/logout')}}">
                 注销登录
                 <i class="entypo-logout right"></i>
               </a>
@@ -247,19 +242,24 @@
         </div>
       </div>
       <hr />
-      <ol class="breadcrumb bc-3">
-        <li>
-          <a href="http://themes.laborator.co/neon/dashboard/main/">
-            <i class="entypo-home"></i>
-            Home
-          </a>
-        </li>
-        <li>
-          <a href="">Dashboard</a>
-        </li>
-        <li class="active"><strong>What's New</strong>
-        </li>
-      </ol>
+      @if(Session::has('message'))
+      <div class="form-group">
+        <div class="tips {{ 'text-'. Session::get('color', 'info') }}">
+        <i class="pull-right">✕</i>
+        {{ Session::get('message') }}
+        </div>
+      </div>
+      @endif
+      @if(count($errors->all()))
+      <div class="tips text-danger">
+          <i class="pull-right">✕</i>
+          <ul>
+          @foreach($errors->all('<li class="pad-y-5">:message</li>') as $error)
+              {{$error}}
+          @endforeach
+          </ul>
+      </div>
+      @endif
       @yield('content')
       <!-- Footer -->
       <footer class="main">
@@ -281,10 +281,15 @@
   <script src="{{ asset('/assets/js/admin-common.js') }}" id="script-resource-23"></script>
   <script type="text/javascript">
   $(document).ready(function(){
-    var currentAction = $('.sidebar-menu a[href="{{URL::current()}}"]');
-    var parentLink = currentAction.parent().parent('ul').prev('a');
-    var breadCrumbs = $('.breadcrumb');
-    breadCrumbs.find('li:last strong').text(currentAction.find('span').text()).parent().prev('li').find('a').attr('href', parentLink.attr('href')).text(parentLink.text());
+    var currentAction = $('#main-menu a[href="{{URL::current()}}"]:last');
+    var parentUl = currentAction.parent().parent('ul');
+    var parentRoot = parentUl.parent('li.root-level');
+    var parentLink = parentUl.prev('a');
+    //TODO:js还需要优化，因为如果没有子菜单的高亮无效
+    parentRoot.addClass('active opened').siblings().removeClass('active').removeClass('opened');
+    if (parentRoot.hasClass('has-sub') || $('.page-container.sidebar-collapsed').length) {
+      parentUl.slideDown(300);
+    };
   });
   </script>
   @yield('page_js')

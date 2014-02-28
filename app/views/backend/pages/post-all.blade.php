@@ -1,63 +1,61 @@
 @extends('backend.layout')
+@section('page_title')
+<h1>文章 <a href="{{url('/admin/post/new')}}" class="btn btn-info">写文章</a></h1>
+@endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12 form-group">
-        <h2 class="inline-block">所有文章</h2>
-        <button class="btn btn-xs btn-info" onclick="javascript:window.location.href='{{ url('admin/post/new') }}'" >写文章</button>
-    </div>
     <div class="col-md-12 form-group">
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>
-                        <input type="checkbox" class="select-all"></th>
-                    <th>分类名</th>
-                    <th>描述</th>
-                    <th>别名</th>
-                    <th>文章</th>
+                        <input type="checkbox" class="select-all">
+                    </th>
+                    <th>标题</th>
+                    <th>分类</th>
+                    <th>浏览次数</th>
+                    <th>评论次数</th>
+                    <th class="do">操作</th>
                 </tr>
             </thead>
             <tbody>
+                @if(!count($posts))
+                <tr>
+                    <td colspan="6">目前没有文章</td>
+                </tr>
+                @else
+                @foreach($posts as $post)
                 <tr>
                     <td>
-                        <input type="checkbox"></td>
-                    <td>分类1</td>
-                    <td>这是分类1的描述</td>
-                    <td>cate1</td>
-                    <td>20</td>
-                </tr>
-                <tr>
+                        <input type="checkbox" value="{{$post->id}}">
+                    </td>
+                    <td class="td-post-title">
+                        {{$post->post_title}}
+                    </td>
                     <td>
-                        <input type="checkbox"></td>
-                    <td>分类2</td>
-                    <td>这是分类2的描述</td>
-                    <td>cate2</td>
-                    <td>17</td>
-                </tr>
-                <tr>
+                        @if(!count($post->categorys()))
+                            无
+                        @else
+                            {{join('、', array_fetch($post->categorys(), 'name'))}}
+                        @endif
+                    </td>
+                    <td>{{$post->view_count}}</td>
+                    <td>{{$post->comment_count}}</td>
                     <td>
-                        <input type="checkbox"></td>
-                    <td>分类3</td>
-                    <td>这是分类3的描述</td>
-                    <td>cate3</td>
-                    <td>0</td>
+                        <div class="td-tool-bar">
+                            <a href="{{url('/admin/post/edit', array('id' => $post->id))}}" class="btn btn-default btn-sm btn-icon icon-left">
+                                <i class="entypo-pencil"></i>
+                                编辑
+                            </a>
+                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
+                                <i class="entypo-cancel"></i>
+                                删除
+                            </a>
+                        </div>
+                    </td>
                 </tr>
-                <tr>
-                    <td>
-                        <input type="checkbox"></td>
-                    <td>-- 子分类1</td>
-                    <td>这是子分类1的描述</td>
-                    <td>cate4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="checkbox"></td>
-                    <td>-- 子分类2</td>
-                    <td>这是子分类2的描述</td>
-                    <td>cate5</td>
-                    <td>9</td>
-                </tr>
+                @endforeach
+                @endif
             </tbody>
         </table>
     </div>
