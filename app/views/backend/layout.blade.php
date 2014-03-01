@@ -90,7 +90,7 @@
 
         </li>
 
-        <!-- <li>
+        <li>
           <a href="{{ url('/admin/comment/all') }}">
             <i class="entypo-comment"></i>
             <span>评论</span>
@@ -121,7 +121,7 @@
 
         </li>
 
-        <li>
+        <!-- <li>
           <a href="">
             <i class="entypo-tools"></i>
             <span>工具</span>
@@ -142,7 +142,7 @@
           </ul>
         </li> -->
 
-        <!-- <li>
+        <li>
           <a href="{{ url('/admin/user/all') }}">
             <i class="entypo-user"></i>
             <span>用户</span>
@@ -161,16 +161,16 @@
               </a>
             </li>
           </ul>
-        </li> -->
+        </li>
 
         <li>
-          <a href="{{ url('/admin/setting/basic') }}">
+          <a href="{{ url('/admin/system/basic') }}">
             <i class="entypo-cog"></i>
             <span>设置</span>
           </a>
           <ul>
             <li>
-              <a href="{{ url('/admin/setting/basic') }}">
+              <a href="{{ url('/admin/system/basic') }}">
                 <span>基本设置</span>
               </a>
             </li>
